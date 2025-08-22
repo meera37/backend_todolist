@@ -4,7 +4,7 @@ TodoList is a minimal full-stack web application that helps users organize and m
 
 ## Setup Instructions
 1. Clone the repository
-- git clone https://github.com/yourusername/frontend.git
+- git clone https://github.com/meera37/backend_todolist.git
 - cd backend
 2. Install dependencies:
 - npm install
