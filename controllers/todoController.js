@@ -25,7 +25,12 @@ exports.createTodo = async (req, res) => {
 
 exports.getTodos = async (req, res) => {
   try {
-    const todos = await Todo.find()
+    const todos = await Todo.find({
+      $or: [
+        { assignedBy: req.payload.userId },
+        { assignedTo: req.payload.userId }
+      ]
+    })
       .populate("assignedBy", "username email")
       .populate("assignedTo", "username email");
 
@@ -36,6 +41,7 @@ exports.getTodos = async (req, res) => {
 };
 
 
+
 // Update my todo
 exports.updateTodo = async (req, res) => {
   try {
@@ -43,7 +49,7 @@ exports.updateTodo = async (req, res) => {
     const { title, description, status } = req.body;
 
     const todo = await Todo.findOneAndUpdate(
-      { _id: id, assignedBy: req.payload.userId }, 
+      { _id: id, $or: [ { assignedBy: req.payload.userId }, { assignedTo: req.payload.userId } ] },
       { title, description, status },
       { new: true }
     );
@@ -121,21 +127,3 @@ exports.getAssignedToMe = async (req, res) => {
   }
 };
 
-// // Dashboard API (combined response)
-// exports.getDashboardTodos = async (req, res) => {
-//   try {
-//     const userId = req.payload.userId;
-
-//     const assignedByMe = await Todo.find({ assignedBy: userId })
-//       .populate("assignedTo", "username email") // <-- change here
-//       .sort({ createdAt: -1 });
-
-//     const assignedToMe = await Todo.find({ assignedTo: userId })
-//       .populate("assignedBy", "username email") // <-- change here
-//       .sort({ createdAt: -1 });
-
-//     res.json({ assignedByMe, assignedToMe });
-//   } catch (error) {
-//     res.status(500).json({ message: "Server error", error: error.message });
-//   }
-// };
