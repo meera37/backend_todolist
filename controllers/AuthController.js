@@ -69,7 +69,6 @@ exports.loginController = async (req, res) => {
 
 exports.getUsers = async (req, res) => {
   try {
-    // return only safe fields
     const users = await User.find({}, "username email");
     res.json(users);
   } catch (error) {

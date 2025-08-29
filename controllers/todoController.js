@@ -77,8 +77,8 @@ exports.deleteTodo = async (req, res) => {
 // Assign an existing todo to another user
 exports.assignTodo = async (req, res) => {
   try {
-    const { id } = req.params; // todo id
-    const { assignedTo } = req.body; // assignee userId
+    const { id } = req.params; 
+    const { assignedTo } = req.body; 
 
     const todo = await Todo.findOne({ _id: id, assignedBy: req.payload.userId });
 
@@ -99,7 +99,7 @@ exports.assignTodo = async (req, res) => {
 exports.getAssignedByMe = async (req, res) => {
   try {
     const todos = await Todo.find({ assignedBy: req.payload.userId })
-      .populate("assignedTo", "username email") // <-- change here
+      .populate("assignedTo", "username email") 
       .sort({ createdAt: -1 });
 
     res.json(todos);
@@ -112,7 +112,7 @@ exports.getAssignedByMe = async (req, res) => {
 exports.getAssignedToMe = async (req, res) => {
   try {
     const todos = await Todo.find({ assignedTo: req.payload.userId })
-      .populate("assignedBy", "username email") // <-- change here
+      .populate("assignedBy", "username email") 
       .sort({ createdAt: -1 });
 
     res.json(todos);
@@ -121,21 +121,21 @@ exports.getAssignedToMe = async (req, res) => {
   }
 };
 
-// Dashboard API (combined response)
-exports.getDashboardTodos = async (req, res) => {
-  try {
-    const userId = req.payload.userId;
+// // Dashboard API (combined response)
+// exports.getDashboardTodos = async (req, res) => {
+//   try {
+//     const userId = req.payload.userId;
 
-    const assignedByMe = await Todo.find({ assignedBy: userId })
-      .populate("assignedTo", "username email") // <-- change here
-      .sort({ createdAt: -1 });
+//     const assignedByMe = await Todo.find({ assignedBy: userId })
+//       .populate("assignedTo", "username email") // <-- change here
+//       .sort({ createdAt: -1 });
 
-    const assignedToMe = await Todo.find({ assignedTo: userId })
-      .populate("assignedBy", "username email") // <-- change here
-      .sort({ createdAt: -1 });
+//     const assignedToMe = await Todo.find({ assignedTo: userId })
+//       .populate("assignedBy", "username email") // <-- change here
+//       .sort({ createdAt: -1 });
 
-    res.json({ assignedByMe, assignedToMe });
-  } catch (error) {
-    res.status(500).json({ message: "Server error", error: error.message });
-  }
-};
+//     res.json({ assignedByMe, assignedToMe });
+//   } catch (error) {
+//     res.status(500).json({ message: "Server error", error: error.message });
+//   }
+// };
